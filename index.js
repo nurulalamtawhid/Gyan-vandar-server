@@ -13,11 +13,25 @@ app.use(express.json());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@database1.wijxnwd.mongodb.net/?retryWrites=true&w=majority`;
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
     try{
+        //db colection declaration
+        const booksCategoryCollection = client.db('gyan-vandar').collection('books-categories');
 
+
+
+
+
+
+        //categories collection get api frm db
+        app.get('/bookscategories',async(req,res)=>{
+            const query ={};
+            const options = await booksCategoryCollection.find(query).toArray();
+            res.send(options);
+        })
     }
     finally{
 
