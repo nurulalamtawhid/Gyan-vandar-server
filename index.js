@@ -20,6 +20,7 @@ async function run(){
     try{
         //db colection declaration
         const booksCategoryCollection = client.db('gyan-vandar').collection('books-categories');
+        const productsCollection = client.db('gyan-vandar').collection('products-collection');
 
 
 
@@ -30,6 +31,14 @@ async function run(){
         app.get('/bookscategories',async(req,res)=>{
             const query ={};
             const options = await booksCategoryCollection.find(query).toArray();
+            res.send(options);
+        })
+        //products collection
+        app.get('/products/:name',async(req,res)=>{
+            const categoryname = req.params.name;
+            console.log(categoryname);
+            const query ={categoryname};
+            const options = await productsCollection.find(query).toArray();
             res.send(options);
         })
     }
