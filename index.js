@@ -21,6 +21,7 @@ async function run(){
         //db colection declaration
         const booksCategoryCollection = client.db('gyan-vandar').collection('books-categories');
         const productsCollection = client.db('gyan-vandar').collection('products-collection');
+        const usersCollection = client.db('gyan-vandar').collection('users-collection');
 
 
 
@@ -41,6 +42,15 @@ async function run(){
             const options = await productsCollection.find(query).toArray();
             res.send(options);
         })
+        // users info Api start here add,get delete
+
+        //user save to databse from signup
+        app.post('/users',async(req,res)=>{
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        })
+
     }
     finally{
 
