@@ -21,6 +21,7 @@ async function run(){
         //db colection declaration
         const booksCategoryCollection = client.db('gyan-vandar').collection('books-categories');
         const productsCollection = client.db('gyan-vandar').collection('products-collection');
+        const bookingsCollection = client.db('gyan-vandar').collection('bookings')
         const usersCollection = client.db('gyan-vandar').collection('users-collection');
 
 
@@ -42,6 +43,40 @@ async function run(){
             const options = await productsCollection.find(query).toArray();
             res.send(options);
         })
+        //booking product to db
+        app.post('/bookings',async(req,res)=>{
+            const booking = req.body;
+            // sorted booking insertion for only one book of one cateory
+            const query ={
+                email : booking.email,
+                 
+                book : booking.book
+            }
+            console.log(query);
+            const alreadyBooked = await bookingsCollection.find(query).toArray();
+            if(alreadyBooked.length){
+                const message = `You have already booking on ${booking.book}`
+                return res.send({acknowledged:false, message})
+            }
+
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
+
+        });
+        app.get('/bookings', async(req,res)=>{      
+            const email = req.query.email;           //api  - 1  
+           // const decodedEmail = req.decoded.email;
+           // console.log(decodedEmail);
+            {/*if(email !== decodedEmail){
+                return  res.status(403).send({message: 'forbidden access'})
+            }*/}
+           // console.log('token', req.headers.authorization); 
+            const query ={email : email} ;
+            const bookings = await bookingsCollection.find(query).toArray();
+            res.send(bookings);  
+        })
+        
+     
         // users info Api start here add,get delete
 
         //user save to databse from signup
