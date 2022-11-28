@@ -142,7 +142,7 @@ async function run() {
             const email = req.query.email;
            // const name =  req.query.sellername;
             console.log('email', email);
-            //console.log('token get', req.headers.authorization);         //api  - 1  
+            
 
         const decodedEmail = req.decoded.email;
             //console.log(decodedEmail);
@@ -211,6 +211,18 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateddoc, options);
             res.send(result);
         });
+        /// add products
+        app.get('/categoriesselect', async(req,res)=>{
+            const query ={};
+            const result = await booksCategoryCollection.find(query).project({name :1}).toArray();
+            res.send(result);
+         })
+         ///
+         app.post('/products',verifyJWT, async(req,res)=>{
+            const product = req.body;
+            const result =await productsCollection.insertOne(product);
+            res.send(result);
+         }) 
 
 
     }
