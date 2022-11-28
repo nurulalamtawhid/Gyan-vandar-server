@@ -247,6 +247,14 @@ async function run() {
             const result = await productsCollection.updateOne(filter, updateddoc, options);
             res.send(result);
         });
+        // advertised products get
+        app.get('/advertisedproducts',async(req,res)=>{
+            const query = {
+                aadvertise : "advertise"
+            };
+            const result = await productsCollection.find(query).toArray();
+            res.send(result);
+        })
 
 
     }
