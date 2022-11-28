@@ -54,7 +54,7 @@ async function run() {
         const productsCollection = client.db('gyan-vandar').collection('products-collection');
         const bookingsCollection = client.db('gyan-vandar').collection('bookings')
         const usersCollection = client.db('gyan-vandar').collection('users-collection');
-
+        const advertisedCollection = client.db('gyan-vandar').collection('advertise-collection');
 
         const verifyAdmin = async (req, res, next) => {
 
@@ -232,6 +232,21 @@ async function run() {
             const result =await productsCollection.insertOne(product);
             res.send(result);
          }) 
+         /// add to advertised
+         app.put('/products/advertised/:id',verifyJWT, async (req, res) => {
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateddoc = {
+                $set: {
+                    aadvertise: 'advertise'
+                }
+
+            }
+            const result = await productsCollection.updateOne(filter, updateddoc, options);
+            res.send(result);
+        });
 
 
     }
