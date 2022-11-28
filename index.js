@@ -164,7 +164,13 @@ async function run() {
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         })
-
+        app.get('/users/seller',async(req,res)=>{
+            const query = {
+                role : "Seller"
+            };
+            const result = await usersCollection.find(query).toArray();
+            res.send(result);
+        })
         //user save to databse from signup
         app.post('/users', async (req, res) => {
             const user = req.body;
