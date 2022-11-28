@@ -179,7 +179,9 @@ async function run() {
         })
 
         app.get('/users', async (req, res) => {
-            const query = {};
+            const query = {
+                role : "Buyer"
+            };
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         })
@@ -211,6 +213,13 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateddoc, options);
             res.send(result);
         });
+        // delete buyers
+        app.delete('/users/:id',verifyJWT,verifyAdmin, async(req,res)=>{
+            const id = req.params.id;
+            const filter = {_id:ObjectId(id)};
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+         })
         /// add products
         app.get('/categoriesselect', async(req,res)=>{
             const query ={};
