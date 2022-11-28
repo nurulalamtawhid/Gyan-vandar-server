@@ -234,9 +234,11 @@ async function run() {
          }) 
          /// add to advertised
          app.put('/products/advertised/:id',verifyJWT, async (req, res) => {
-
+            console.log(req.params);
             const id = req.params.id;
+            console.log(id);
             const filter = { _id: ObjectId(id) };
+            
             const options = { upsert: true };
             const updateddoc = {
                 $set: {
@@ -244,7 +246,9 @@ async function run() {
                 }
 
             }
+            
             const result = await productsCollection.updateOne(filter, updateddoc, options);
+            //console.log(result);
             res.send(result);
         });
         // advertised products get
@@ -253,6 +257,13 @@ async function run() {
                 aadvertise : "advertise"
             };
             const result = await productsCollection.find(query).toArray();
+            res.send(result);
+        })
+        //delete my products
+        app.delete('/products/remove/:id',verifyJWT,async(req,res)=>{
+            const id = req.params.id;
+            const filter = {_id:ObjectId(id)};
+            const result = await productsCollection.deleteOne(filter);
             res.send(result);
         })
 
