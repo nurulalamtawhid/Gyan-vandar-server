@@ -137,6 +137,25 @@ async function run() {
            
             res.status(403).send({accessToken : ""})
         })
+        /// my products from products collection
+        app.get('/products',verifyJWT,async(req,res) => {
+            const email = req.query.email;
+           // const name =  req.query.sellername;
+            console.log('email', email);
+            //console.log('token get', req.headers.authorization);         //api  - 1  
+
+        const decodedEmail = req.decoded.email;
+            //console.log(decodedEmail);
+            if (email !== decodedEmail) {
+                return res.status(403).send({ message: 'forbidden access' })
+            }
+           // console.log('token', req.headers.authorization);
+            const query = { email: email,
+                                  
+                          };
+            const bookings = await productsCollection.find(query).toArray();
+            res.send(bookings);
+        })
       
 
         // users info Api start here add,get delete
